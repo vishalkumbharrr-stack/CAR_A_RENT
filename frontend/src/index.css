@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-800;
+    font-family: Arial, Helvetica, sans-serif;
+  }
+  * {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-rental text-white px-6 py-2.5 rounded-lg font-semibold 
+           hover:bg-rental-dark transition-all duration-200 
+           shadow-md hover:shadow-lg active:scale-95;
+  }
+  .btn-danger {
+    @apply bg-red-500 text-white px-4 py-2.5 rounded-lg font-semibold 
+           hover:bg-red-600 transition-all duration-200 active:scale-95;
+  }
+  .btn-secondary {
+    @apply bg-gray-500 text-white px-4 py-2.5 rounded-lg font-semibold 
+           hover:bg-gray-600 transition-all duration-200 active:scale-95;
+  }
+  .card {
+    @apply bg-white rounded-xl shadow-md hover:shadow-xl 
+           transition-all duration-300 overflow-hidden border border-gray-100;
+  }
+  .input-field {
+    @apply w-full p-3 border border-gray-300 rounded-lg 
+           focus:outline-none focus:ring-2 focus:ring-rental 
+           focus:border-transparent transition-all duration-200;
+  }
+  .table-header {
+    @apply bg-rental text-white font-semibold;
+  }
+  .badge {
+    @apply px-3 py-1 rounded-full text-xs font-semibold capitalize;
+  }
+  .badge-success { @apply badge bg-green-500 text-white; }
+  .badge-warning { @apply badge bg-yellow-500 text-white; }
+  .badge-danger { @apply badge bg-red-500 text-white; }
+  .badge-info { @apply badge bg-blue-500 text-white; }
+  .section-title {
+    @apply text-3xl font-bold text-gray-800 mb-8 text-center;
+  }
+}

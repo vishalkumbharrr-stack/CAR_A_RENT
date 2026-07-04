@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+supabase
+python-dotenv
+pydantic
+python-jose[cryptography]   # for JWT verification (optional if using Supabase client)
+razorpay
+stripe
+httpx
+python-multipart
