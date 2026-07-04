@@ -2,11 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../services/api';
 import useWebSocket from '../hooks/useWebSocket';
+import { showBookingNotification } from '../components/BookingNotification'; // ✅ imported
 
 export default function MyBookings() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { messages } = useWebSocket();   // 👈 auto URL
+  const { messages } = useWebSocket();   // ✅ inside component
 
   const fetchBookings = useCallback(async () => {
     try {
@@ -19,16 +20,21 @@ export default function MyBookings() {
     }
   }, []);
 
+  // Initial fetch on mount
   useEffect(() => {
     fetchBookings();
   }, [fetchBookings]);
 
-  // Listen for real-time updates
+  // WebSocket messages handler – merged logic
   useEffect(() => {
     if (messages.length > 0) {
       const lastMsg = messages[messages.length - 1];
       if (lastMsg.type === 'booking_update' || lastMsg.type === 'new_booking') {
         fetchBookings();
+        // Show notification only for new bookings (optional)
+        if (lastMsg.type === 'new_booking') {
+          showBookingNotification('New Booking!', 'A customer just booked a car');
+        }
       }
     }
   }, [messages, fetchBookings]);

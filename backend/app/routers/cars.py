@@ -3,6 +3,8 @@ from app.database import supabase, supabase_admin
 from app.utils.auth_utils import get_current_user
 from typing import Optional
 import uuid
+from app.utils.auth_utils import get_current_user, require_admin
+
 
 router = APIRouter(prefix="/cars", tags=["cars"])
 
@@ -65,7 +67,8 @@ async def add_car(
         "price_per_day": price_per_day,
         "location": location,
         "image_url": image_url,
-        "available": True
+        "dealer_id": user["id"],
+        "available": True,
     }
     res = supabase_admin.table("cars").insert(car_data).execute()
     return res.data[0]
@@ -121,3 +124,9 @@ async def delete_car(car_id: str, user: dict = Depends(get_current_user)):
         raise HTTPException(status_code=403, detail="Admin only")
     supabase_admin.table("cars").delete().eq("id", car_id).execute()
     return {"message": "Car deleted"}
+
+
+@router.get("/admin/cars")
+async def admin_cars(user: dict = Depends(require_admin)):
+    res = supabase.table("cars").select("*").eq("dealer_id", user["id"]).execute()
+    return res.data

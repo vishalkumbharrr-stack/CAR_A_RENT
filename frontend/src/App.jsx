@@ -9,6 +9,7 @@ import CarDetails from './pages/CarDetails';
 import Checkout from './pages/Checkout';
 import MyBookings from './pages/MyBookings';
 import AdminPanel from './pages/AdminPanel';
+import { Toaster } from 'react-hot-toast';
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
@@ -34,6 +35,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <Toaster position="top-right" />
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <main className="flex-grow">

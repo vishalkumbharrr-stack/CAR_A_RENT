@@ -1,6 +1,7 @@
 from fastapi import Header, HTTPException
 from app.database import supabase
 import traceback
+from fastapi import Depends
 
 async def get_current_user(authorization: str = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
@@ -36,3 +37,9 @@ async def get_current_user(authorization: str = Header(None)):
         print(f"Auth error: {type(e).__name__}: {str(e)}")
         traceback.print_exc()
         raise HTTPException(status_code=401, detail="Token verification failed")
+    
+
+async def require_admin(user: dict = Depends(get_current_user)):
+    if user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return user

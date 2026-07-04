@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import api from '../services/api';
 import CarCard from '../components/CarCard';
 import useWebSocket from '../hooks/useWebSocket';
+import { showBookingNotification } from '../components/BookingNotification';
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('bookings');
@@ -11,7 +12,7 @@ export default function AdminPanel() {
   const [showCarModal, setShowCarModal] = useState(false);
   const [editingCar, setEditingCar] = useState(null);
   const [newBookingsCount, setNewBookingsCount] = useState(0);
-  const { messages, isConnected } = useWebSocket();
+  const { messages, isConnected } = useWebSocket();   // ✅ inside component
 
   const [carForm, setCarForm] = useState({
     name: '',
@@ -32,7 +33,7 @@ export default function AdminPanel() {
 
   const fetchCars = useCallback(async () => {
     try {
-      const res = await api.get('/cars');
+      const res = await api.get('/admin/cars');
       setCars(res.data);
     } catch (err) { console.error(err); }
   }, []);
@@ -44,21 +45,27 @@ export default function AdminPanel() {
     } catch (err) { console.error(err); }
   }, []);
 
+  // Initial data fetch
   useEffect(() => {
     fetchBookings();
     fetchCars();
     fetchRevenue();
   }, [fetchBookings, fetchCars, fetchRevenue]);
 
+  // ✅ SINGLE WebSocket messages handler (merged)
   useEffect(() => {
     if (messages.length > 0) {
       const lastMsg = messages[messages.length - 1];
+      
       if (lastMsg.type === 'new_booking') {
         setNewBookingsCount(prev => prev + 1);
+        // Show notification
+        showBookingNotification('New Booking Received!', 'A customer just booked a car.');
         if (activeTab === 'bookings') {
           fetchBookings();
         }
       }
+      
       if (lastMsg.type === 'booking_update') {
         if (activeTab === 'bookings') {
           fetchBookings();
