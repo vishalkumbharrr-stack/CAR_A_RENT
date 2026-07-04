@@ -30,7 +30,7 @@ export default function Home() {
 
   useEffect(() => {
     fetchCars();
-  }, [category, rentalType]); // refetch when category or rentalType changes
+  }, [category, rentalType]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -40,25 +40,25 @@ export default function Home() {
   return (
     <div>
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-rental-darker via-rental-dark to-rental text-white py-16 md:py-24">
+      <div className="bg-gradient-to-br from-rental-darker via-rental-dark to-rental text-white py-10 sm:py-16 md:py-24">
         <div className="max-w-4xl mx-auto text-center px-4">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 sm:mb-4 leading-tight">
             🚗 Find Your Perfect Ride
           </h1>
-          <p className="text-lg md:text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto">
             Choose from a wide range of cars available in your city. Best prices guaranteed!
           </p>
 
           <form onSubmit={handleSearch} className="max-w-xl mx-auto">
-            <div className="flex gap-2 bg-white rounded-xl p-2 shadow-2xl">
+            <div className="flex flex-col sm:flex-row gap-2 bg-white rounded-xl p-2 shadow-2xl">
               <input
                 type="text"
                 placeholder="Enter your city name..."
-                className="flex-1 p-3.5 text-gray-800 rounded-lg focus:outline-none text-lg"
+                className="flex-1 p-3 sm:p-3.5 text-gray-800 rounded-lg focus:outline-none text-base sm:text-lg"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
               />
-              <button type="submit" className="btn-primary whitespace-nowrap text-lg px-8">
+              <button type="submit" className="btn-primary whitespace-nowrap text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-3.5">
                 🔍 Search
               </button>
             </div>
@@ -67,17 +67,17 @@ export default function Home() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Filters Bar */}
-        <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-center justify-between mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-800">
             {location ? `Cars in "${location}"` : 'Available Cars'}
           </h2>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 w-full sm:w-auto">
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="input-field w-full sm:w-auto min-w-[160px]"
+              className="input-field w-full sm:w-auto min-w-[140px] text-sm sm:text-base"
             >
               <option value="">🚘 All Categories</option>
               <option value="sedan">🚙 Sedan</option>
@@ -88,7 +88,7 @@ export default function Home() {
             <select
               value={rentalType}
               onChange={(e) => setRentalType(e.target.value)}
-              className="input-field w-full sm:w-auto min-w-[160px]"
+              className="input-field w-full sm:w-auto min-w-[140px] text-sm sm:text-base"
             >
               <option value="">All Types</option>
               <option value="local">🏙️ Local</option>
@@ -131,7 +131,7 @@ export default function Home() {
         {!loading && !error && cars.length > 0 && (
           <>
             <p className="text-gray-500 mb-6">{cars.length} car{cars.length !== 1 ? 's' : ''} found</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
               {cars.map((car) => (
                 <CarCard key={car.id} car={car} />
               ))}

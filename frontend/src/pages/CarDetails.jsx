@@ -71,33 +71,30 @@ export default function CarDetails() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto p-4 md:p-8">
-      {/* Breadcrumb */}
-      <Link to="/" className="text-rental hover:underline inline-flex items-center gap-1 mb-6">
+    <div className="max-w-5xl mx-auto p-3 sm:p-4 md:p-8">
+      <Link to="/" className="text-rental hover:underline inline-flex items-center gap-1 mb-4 sm:mb-6 text-sm sm:text-base">
         ← Back to Cars
       </Link>
 
       <div className="card overflow-hidden">
-        {/* Image */}
         <img
           src={car.image_url || 'https://via.placeholder.com/800x400?text=No+Image'}
           alt={car.name}
-          className="w-full h-64 md:h-96 object-cover"
+          className="w-full h-48 sm:h-64 md:h-96 object-cover"
         />
 
-        <div className="p-6 md:p-8">
-          {/* Car Info */}
+        <div className="p-4 sm:p-6 md:p-8">
           <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
             <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800">{car.name}</h1>
-              <p className="text-gray-500 mt-1 text-lg">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800">{car.name}</h1>
+              <p className="text-gray-500 mt-1 text-sm sm:text-base">
                 {car.brand} • <span className="capitalize">{car.category}</span>
               </p>
-              <p className="text-gray-500 flex items-center gap-1 mt-2">📍 {car.location || 'N/A'}</p>
+              <p className="text-gray-500 flex items-center gap-1 mt-2 text-sm">📍 {car.location || 'N/A'}</p>
             </div>
             <div className="text-left md:text-right">
-              <p className="text-4xl font-bold text-rental-dark">₹{car.price_per_day}</p>
-              <p className="text-gray-500">per day</p>
+              <p className="text-3xl sm:text-4xl font-bold text-rental-dark">₹{car.price_per_day}</p>
+              <p className="text-gray-500 text-sm">per day</p>
               {car.available !== false ? (
                 <span className="badge-success inline-block mt-2">Available</span>
               ) : (
@@ -106,49 +103,46 @@ export default function CarDetails() {
             </div>
           </div>
 
-          <hr className="my-6" />
+          <hr className="my-4 sm:my-6" />
 
           {/* Booking Section */}
           {car.available !== false ? (
-            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">📅 Book This Car</h3>
+            <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-3 sm:mb-4">📅 Book This Car</h3>
 
               {!user && (
-                <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg mb-4">
-                  <p className="text-yellow-800">
-                    Please <Link to="/login" className="font-bold underline">login</Link> to book this car.
-                  </p>
+                <div className="bg-yellow-50 border border-yellow-200 p-3 rounded-lg mb-4 text-sm">
+                  Please <Link to="/login" className="font-bold underline">login</Link> to book this car.
                 </div>
               )}
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <div className="flex-1">
-                  <label className="block text-sm font-semibold mb-2">Start Date</label>
+                  <label className="block text-sm font-semibold mb-1.5">Start Date</label>
                   <DatePicker
                     selected={startDate}
                     onChange={(date) => setStartDate(date)}
                     placeholderText="Select start date"
                     minDate={new Date()}
-                    className="input-field"
+                    className="input-field w-full"
                     dateFormat="dd/MM/yyyy"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-semibold mb-2">End Date</label>
+                  <label className="block text-sm font-semibold mb-1.5">End Date</label>
                   <DatePicker
                     selected={endDate}
                     onChange={(date) => setEndDate(date)}
                     placeholderText="Select end date"
                     minDate={startDate || new Date()}
-                    className="input-field"
+                    className="input-field w-full"
                     dateFormat="dd/MM/yyyy"
                   />
                 </div>
               </div>
 
-              {/* Pricing Breakdown */}
               {totalDays > 0 && (
-                <div className="mt-6 bg-white p-5 rounded-lg border space-y-2">
+                <div className="mt-4 sm:mt-6 bg-white p-4 rounded-lg border space-y-2 text-sm sm:text-base">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Duration:</span>
                     <span className="font-semibold">{totalDays} day{totalDays > 1 ? 's' : ''}</span>
@@ -158,15 +152,22 @@ export default function CarDetails() {
                     <span>₹{car.price_per_day} × {totalDays}</span>
                   </div>
                   <hr />
-                  <div className="flex justify-between text-xl font-bold">
+                  <div className="flex justify-between text-lg sm:text-xl font-bold">
                     <span>Total:</span>
                     <span className="text-rental-dark">₹{totalAmount}</span>
                   </div>
                 </div>
               )}
 
+              {user && (
+                <div className="mt-4 bg-gray-100 p-3 rounded-lg border text-sm">
+                  <p><span className="font-semibold">Name:</span> {user.full_name}</p>
+                  <p><span className="font-semibold">Phone:</span> {user.phone || 'N/A'}</p>
+                </div>
+              )}
+
               {bookingError && (
-                <div className="mt-4 bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm">
+                <div className="mt-3 bg-red-50 border border-red-200 text-red-700 p-3 rounded-lg text-sm">
                   ⚠️ {bookingError}
                 </div>
               )}
@@ -174,7 +175,7 @@ export default function CarDetails() {
               <button
                 onClick={handleBooking}
                 disabled={!user || !startDate || !endDate || bookingLoading}
-                className={`mt-4 w-full py-3.5 text-lg font-bold rounded-xl transition ${
+                className={`mt-4 w-full py-3 text-base sm:text-lg font-bold rounded-xl transition ${
                   user && startDate && endDate && !bookingLoading
                     ? 'btn-primary'
                     : 'bg-gray-300 text-gray-500 cursor-not-allowed'
@@ -184,10 +185,10 @@ export default function CarDetails() {
               </button>
             </div>
           ) : (
-            <div className="bg-red-50 border border-red-200 p-8 rounded-xl text-center">
-              <span className="text-6xl">🚫</span>
-              <h3 className="text-xl font-bold text-red-600 mt-4">Currently Unavailable</h3>
-              <p className="text-red-500 mt-2">This car is currently booked. Please browse other cars.</p>
+            <div className="bg-red-50 border border-red-200 p-6 sm:p-8 rounded-xl text-center">
+              <span className="text-5xl sm:text-6xl">🚫</span>
+              <h3 className="text-lg sm:text-xl font-bold text-red-600 mt-4">Currently Unavailable</h3>
+              <p className="text-red-500 mt-2 text-sm sm:text-base">This car is currently booked. Please browse other cars.</p>
               <Link to="/" className="btn-primary inline-block mt-4">Browse Cars</Link>
             </div>
           )}

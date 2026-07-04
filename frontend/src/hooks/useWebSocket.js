@@ -3,9 +3,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 export default function useWebSocket(url) {
   // Build WebSocket URL from VITE_API_URL if no explicit url passed
   const wsUrl = url || (() => {
-    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-    // Replace http -> ws / https -> wss and append path
-    return baseUrl.replace(/^http/, 'ws') + '/ws/bookings';
+    const baseUrl = import.meta.env.VITE_API_URL || 'https://localhost:8000';
+    return baseUrl.replace(/^https/, 'wss') + '/ws/bookings';
   })();
 
   const [messages, setMessages] = useState([]);

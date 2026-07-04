@@ -1,22 +1,19 @@
-import { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import useWebSocket from '../hooks/useWebSocket';
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  const { messages } = useWebSocket('ws://localhost:8000/ws/bookings');
-  const location = useLocation();
 
   return (
     <nav className="bg-gradient-to-r from-rental-darker via-rental-dark to-rental text-white shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between items-center py-3">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4">
+        <div className="flex justify-between items-center py-2 sm:py-3">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <span className="text-3xl group-hover:animate-bounce">🚗</span>
-            <span className="font-bold text-xl hidden sm:block">CarRental</span>
+          <Link to="/" className="flex items-center space-x-1 sm:space-x-2 group">
+            <span className="text-2xl sm:text-3xl group-hover:animate-bounce">🚗</span>
+            <span className="font-bold text-lg sm:text-xl">CarRental</span>
           </Link>
 
           {/* Mobile menu button */}
@@ -28,37 +25,38 @@ export default function Navbar() {
           </button>
 
           {/* Desktop menu */}
-          <div className="hidden sm:flex items-center space-x-3">
+          <div className="hidden sm:flex items-center space-x-1 sm:space-x-3">
             {user ? (
               <>
-                {/* My Bookings – only for customers */}
                 {user.role !== 'admin' && (
-                  <Link to="/my-bookings" className="nav-link">
+                  <Link to="/my-bookings" className="nav-link text-xs sm:text-sm">
                     📋 My Bookings
                   </Link>
                 )}
-
-                {/* Admin link – simple, no badge */}
                 {user.role === 'admin' && (
-                  <Link to="/admin" className="nav-link">
+                  <Link to="/admin" className="nav-link text-xs sm:text-sm">
                     ⚙️ Admin
                   </Link>
                 )}
-
-                <span className="text-white/70 px-2 hidden lg:block text-sm">
+                <span className="text-white/70 px-1 sm:px-2 text-xs sm:text-sm hidden lg:block">
                   👤 {user.full_name || 'User'}
                 </span>
                 <button
                   onClick={logout}
-                  className="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg transition font-semibold text-sm active:scale-95"
+                  className="bg-red-500 hover:bg-red-600 px-2 sm:px-4 py-1.5 sm:py-2 rounded-lg transition font-semibold text-xs sm:text-sm"
                 >
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="nav-link">Login</Link>
-                <Link to="/signup" className="bg-white text-rental-dark hover:bg-gray-100 px-4 py-2 rounded-lg transition font-semibold text-sm">
+                <Link to="/login" className="nav-link text-xs sm:text-sm">
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="bg-white text-rental-dark hover:bg-gray-100 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg transition font-semibold text-xs sm:text-sm"
+                >
                   Signup
                 </Link>
               </>
@@ -68,27 +66,53 @@ export default function Navbar() {
 
         {/* Mobile menu */}
         {menuOpen && (
-          <div className="sm:hidden pb-3 space-y-2">
+          <div className="sm:hidden pb-3 space-y-1">
             {user ? (
               <>
                 {user.role !== 'admin' && (
-                  <Link to="/my-bookings" className="block py-2 px-3 rounded hover:bg-white/20" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    to="/my-bookings"
+                    className="block py-2 px-3 rounded hover:bg-white/20 text-sm"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     📋 My Bookings
                   </Link>
                 )}
                 {user.role === 'admin' && (
-                  <Link to="/admin" className="block py-2 px-3 rounded hover:bg-white/20" onClick={() => setMenuOpen(false)}>
+                  <Link
+                    to="/admin"
+                    className="block py-2 px-3 rounded hover:bg-white/20 text-sm"
+                    onClick={() => setMenuOpen(false)}
+                  >
                     ⚙️ Admin
                   </Link>
                 )}
-                <button onClick={() => { logout(); setMenuOpen(false); }} className="w-full text-left py-2 px-3 rounded hover:bg-red-500">
+                <button
+                  onClick={() => {
+                    logout();
+                    setMenuOpen(false);
+                  }}
+                  className="w-full text-left py-2 px-3 rounded hover:bg-red-500 text-sm"
+                >
                   Logout
                 </button>
               </>
             ) : (
               <>
-                <Link to="/login" className="block py-2 px-3 rounded hover:bg-white/20" onClick={() => setMenuOpen(false)}>Login</Link>
-                <Link to="/signup" className="block py-2 px-3 rounded bg-white text-rental-dark font-semibold" onClick={() => setMenuOpen(false)}>Signup</Link>
+                <Link
+                  to="/login"
+                  className="block py-2 px-3 rounded hover:bg-white/20 text-sm"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/signup"
+                  className="block py-2 px-3 rounded bg-white text-rental-dark font-semibold text-sm"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Signup
+                </Link>
               </>
             )}
           </div>
@@ -97,7 +121,7 @@ export default function Navbar() {
 
       <style>{`
         .nav-link {
-          @apply px-3 py-2 rounded-lg hover:bg-white/20 transition text-sm font-medium;
+          @apply px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg hover:bg-white/20 transition text-xs sm:text-sm font-medium;
         }
       `}</style>
     </nav>
