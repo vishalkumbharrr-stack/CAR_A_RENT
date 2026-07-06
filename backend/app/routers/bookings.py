@@ -16,18 +16,16 @@ async def create_booking(
     if start_date >= end_date:
         raise HTTPException(status_code=400, detail="Invalid date range")
 
-    # Car check – safe with anon key
     car = supabase.table("cars").select("*").eq("id", car_id).single().execute()
     if not car.data or not car.data.get("available"):
         raise HTTPException(status_code=400, detail="Car not available")
 
-    # Overlap check – safe with anon key
     overlap = supabase.table("bookings").select("*") \
-    .eq("car_id", car_id) \
-    .neq("status", "cancelled") \
-    .lte("start_date", str(end_date)) \
-    .gte("end_date", str(start_date)) \
-    .execute()
+        .eq("car_id", car_id) \
+        .neq("status", "cancelled") \
+        .lte("start_date", str(end_date)) \
+        .gte("end_date", str(start_date)) \
+        .execute()
     if overlap.data:
         raise HTTPException(status_code=409, detail="Car already booked for these dates")
 
@@ -43,7 +41,6 @@ async def create_booking(
         "status": "pending"
     }
 
-    # ✅ Use supabase_admin to bypass RLS
     res = supabase_admin.table("bookings").insert(booking_data).execute()
     new_booking = res.data[0]
 
@@ -76,7 +73,6 @@ async def update_booking_status(
     if user.get("role") != "admin":
         raise HTTPException(status_code=403, detail="Admin only")
 
-    # ✅ Admin update with service_role
     supabase_admin.table("bookings").update({"status": status}).eq("id", booking_id).execute()
 
     await manager.broadcast({

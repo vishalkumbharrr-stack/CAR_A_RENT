@@ -30,13 +30,13 @@ export function AuthProvider({ children }) {
   };
 
   const signup = async (phone, password, fullName, role = 'customer') => {
-  await api.post('/auth/signup', {
-    full_name: fullName,
-    phone: phone,
-    password: password,
-    role: role          
-  });
-};
+    await api.post('/auth/signup', {
+      full_name: fullName,
+      phone: phone,
+      password: password,
+      role: role
+    });
+  };
 
   const logout = () => {
     localStorage.removeItem('access_token');
