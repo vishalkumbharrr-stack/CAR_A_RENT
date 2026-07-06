@@ -28,6 +28,11 @@ export default function Navbar() {
           <div className="hidden sm:flex items-center space-x-1 sm:space-x-3">
             {user ? (
               <>
+                {/* Profile link – visible to all logged‑in users */}
+                <Link to="/profile" className="nav-link text-xs sm:text-sm">
+                  👤 Profile
+                </Link>
+
                 {user.role !== 'admin' && (
                   <Link to="/my-bookings" className="nav-link text-xs sm:text-sm">
                     📋 My Bookings
@@ -69,6 +74,15 @@ export default function Navbar() {
           <div className="sm:hidden pb-3 space-y-1">
             {user ? (
               <>
+                {/* Profile link – mobile */}
+                <Link
+                  to="/profile"
+                  className="block py-2 px-3 rounded hover:bg-white/20 text-sm"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  👤 Profile
+                </Link>
+
                 {user.role !== 'admin' && (
                   <Link
                     to="/my-bookings"

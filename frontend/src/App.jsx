@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -9,16 +9,31 @@ import CarDetails from './pages/CarDetails';
 import Checkout from './pages/Checkout';
 import MyBookings from './pages/MyBookings';
 import AdminPanel from './pages/AdminPanel';
-import { Toaster } from 'react-hot-toast';
+import Profile from './pages/Profile';
+import { Toaster, toast } from 'react-hot-toast';
 
 function PrivateRoute({ children }) {
   const { user, loading } = useAuth();
+  const location = useLocation();
+
   if (loading) return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="animate-spin rounded-full h-14 w-14 border-b-2 border-rental"></div>
     </div>
   );
-  return user ? children : <Navigate to="/login" />;
+  if (!user) return <Navigate to="/login" />;
+
+  // Check profile completeness for customers
+  if (user.role === 'customer') {
+    const requiredFields = ['address', 'aadhaar_number', 'dl_number'];
+    const missing = requiredFields.filter(field => !user[field]);
+    if (missing.length > 0) {
+      toast.error('Please complete your profile (Address, Aadhaar, Driving Licence) before proceeding.');
+      return <Navigate to={`/profile?redirect=${encodeURIComponent(location.pathname)}`} />;
+    }
+  }
+
+  return children;
 }
 
 function AdminRoute({ children }) {
@@ -47,6 +62,7 @@ export default function App() {
               <Route path="/checkout/:bookingId" element={<PrivateRoute><Checkout /></PrivateRoute>} />
               <Route path="/my-bookings" element={<PrivateRoute><MyBookings /></PrivateRoute>} />
               <Route path="/admin" element={<AdminRoute><AdminPanel /></AdminRoute>} />
+              <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
             </Routes>
           </main>
           <Footer />

@@ -116,6 +116,37 @@ export default function CarDetails() {
                 </div>
               )}
 
+              {/* Full Customer Profile (if logged in) */}
+              {user && (
+                <div className="bg-white border rounded-lg p-4 mb-4 space-y-3">
+                  <h4 className="font-semibold text-gray-700">👤 Your Details</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                    <div><span className="text-gray-500">Name:</span> {user.full_name}</div>
+                    <div><span className="text-gray-500">Phone:</span> {user.phone || 'N/A'}</div>
+                    <div className="col-span-2"><span className="text-gray-500">Address:</span> {user.address || 'N/A'}</div>
+                    <div><span className="text-gray-500">Aadhaar:</span> {user.aadhaar_number || 'N/A'}</div>
+                    <div><span className="text-gray-500">DL No.:</span> {user.dl_number || 'N/A'}</div>
+                    <div><span className="text-gray-500">DL Expiry:</span> {user.dl_expiry || 'N/A'}</div>
+                    <div><span className="text-gray-500">Emergency:</span> {user.emergency_contact || 'N/A'}</div>
+                  </div>
+
+                  {/* Aadhaar Photo */}
+                  {user.aadhaar_image_url && (
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-500 mb-1">Aadhaar Photo</p>
+                      <img src={user.aadhaar_image_url} alt="Aadhaar" className="w-24 h-16 object-cover rounded border" />
+                    </div>
+                  )}
+                  {/* DL Photo */}
+                  {user.dl_image_url && (
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-500 mb-1">DL Photo</p>
+                      <img src={user.dl_image_url} alt="DL" className="w-24 h-16 object-cover rounded border" />
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <div className="flex-1">
                   <label className="block text-sm font-semibold mb-1.5">Start Date</label>
@@ -156,13 +187,6 @@ export default function CarDetails() {
                     <span>Total:</span>
                     <span className="text-rental-dark">₹{totalAmount}</span>
                   </div>
-                </div>
-              )}
-
-              {user && (
-                <div className="mt-4 bg-gray-100 p-3 rounded-lg border text-sm">
-                  <p><span className="font-semibold">Name:</span> {user.full_name}</p>
-                  <p><span className="font-semibold">Phone:</span> {user.phone || 'N/A'}</p>
                 </div>
               )}
 

@@ -15,4 +15,4 @@ class CarCreate(CarBase):
 
 class CarOut(CarBase):
     id: str
-    image_url: Optional[str] = None
+    image_url: Optional[str] = None                                                 

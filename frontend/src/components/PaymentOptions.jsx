@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import api from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { showBookingNotification } from '../components/BookingNotification'; // 👈 new import
 
 export default function PaymentOptions({ booking }) {
   const [mode, setMode] = useState('');
@@ -25,7 +26,8 @@ export default function PaymentOptions({ booking }) {
             await api.post(
               `/payments/online/verify?booking_id=${booking.id}&razorpay_order_id=${response.razorpay_order_id}&razorpay_payment_id=${response.razorpay_payment_id}&razorpay_signature=${response.razorpay_signature}`
             );
-            alert('✅ Payment successful!');
+            // Online payment success – optionally also show toast here
+            showBookingNotification('Payment successful!', 'Online payment confirmed.');
             navigate('/my-bookings');
           } catch (err) {
             alert('❌ Payment verification failed');
@@ -57,9 +59,9 @@ export default function PaymentOptions({ booking }) {
   const handleOffline = async () => {
     setLoading(true);
     try {
-      // Customer initiates offline payment (not admin confirm)
       await api.post(`/payments/offline/initiate?booking_id=${booking.id}`);
-      alert('✅ Booking confirmed! Pay cash at pickup.');
+      // 👇 Show toast notification with sound
+      showBookingNotification('Booking Confirmed!', 'Pay cash when you pick up the car.');
       navigate('/my-bookings');
     } catch (err) {
       alert('Failed to confirm booking. Please try again.');

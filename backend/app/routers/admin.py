@@ -24,8 +24,8 @@ async def all_bookings(
         return []  # no cars, no bookings
 
     # Step 2: Filter bookings by those car IDs
-    query = supabase.table("bookings").select("*, cars(name, rental_type), users(full_name, phone)") \
-        .in_("car_id", car_ids)
+    query = supabase.table("bookings").select("*, cars(name, rental_type), users(*)") \
+    .in_("car_id", car_ids)
     if status:
         query = query.eq("status", status)
     res = query.order("created_at", desc=True).execute()

@@ -8,7 +8,12 @@ export default function Signup() {
     phone: '',
     password: '',
     confirmPassword: '',
-    role: 'customer',   // 👈 Default role
+    role: 'customer',
+    // KYC fields
+    address: '',
+    aadhaar_number: '',
+    dl_number: '',
+    emergency_contact: ''
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -42,8 +47,8 @@ export default function Signup() {
 
     setLoading(true);
     try {
-      // Pass role along with other data
-      await signup(formData.phone, formData.password, formData.full_name, formData.role);
+      // Send all fields to AuthContext
+      await signup(formData);
       alert('✅ Signup successful! Please login to continue.');
       navigate('/login');
     } catch (err) {
@@ -55,8 +60,7 @@ export default function Signup() {
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4 py-8">
-      <div className="card max-w-md w-full p-8">
-        {/* Header */}
+      <div className="card max-w-lg w-full p-8">
         <div className="text-center mb-6">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4">
             <span className="text-4xl">📝</span>
@@ -65,101 +69,64 @@ export default function Signup() {
           <p className="text-gray-500 mt-2">Fill in the details to get started</p>
         </div>
 
-        {/* Error Alert */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
             ⚠️ {error}
           </div>
         )}
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Full Name *
-            </label>
-            <input
-              type="text"
-              name="full_name"
-              placeholder="Enter your full name"
-              required
-              className="input-field"
-              value={formData.full_name}
-              onChange={handleChange}
-            />
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Full Name *</label>
+            <input type="text" name="full_name" placeholder="Enter your full name" required className="input-field" value={formData.full_name} onChange={handleChange} />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Phone Number *
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              placeholder="10-digit mobile number"
-              required
-              maxLength={10}
-              className="input-field"
-              value={formData.phone}
-              onChange={handleChange}
-            />
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Phone Number *</label>
+            <input type="tel" name="phone" placeholder="10-digit mobile number" required maxLength={10} className="input-field" value={formData.phone} onChange={handleChange} />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Account Type *
-            </label>
-            <select
-              name="role"
-              className="input-field"
-              value={formData.role}
-              onChange={handleChange}
-            >
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Account Type *</label>
+            <select name="role" className="input-field" value={formData.role} onChange={handleChange}>
               <option value="customer">🚗 Customer (Rent Cars)</option>
               <option value="admin">⚙️ Car Dealer / Admin</option>
             </select>
-            {formData.role === 'admin' && (
-              <p className="text-xs text-amber-600 mt-1 flex items-center gap-1">
-                ⚠️ Dealer accounts may require approval. Contact support if needed.
-              </p>
-            )}
+          </div>
+
+          {/* KYC Fields */}
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Address</label>
+            <textarea name="address" placeholder="Your full address" className="input-field h-16 resize-none" value={formData.address} onChange={handleChange} />
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Aadhaar Number</label>
+              <input type="text" name="aadhaar_number" placeholder="1234 5678 9012" className="input-field" value={formData.aadhaar_number} onChange={handleChange} />
+            </div>
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">DL Number</label>
+              <input type="text" name="dl_number" placeholder="MH01 20240001234" className="input-field" value={formData.dl_number} onChange={handleChange} />
+            </div>
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Password *
-            </label>
-            <input
-              type="password"
-              name="password"
-              placeholder="Min 6 characters"
-              required
-              className="input-field"
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Emergency Contact</label>
+            <input type="tel" name="emergency_contact" placeholder="Phone number" className="input-field" value={formData.emergency_contact} onChange={handleChange} />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
-              Confirm Password *
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              placeholder="Re-enter password"
-              required
-              className="input-field"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-            />
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Password *</label>
+            <input type="password" name="password" placeholder="Min 6 characters" required className="input-field" value={formData.password} onChange={handleChange} />
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn-primary w-full text-lg py-3.5 mt-4"
-          >
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">Confirm Password *</label>
+            <input type="password" name="confirmPassword" placeholder="Re-enter password" required className="input-field" value={formData.confirmPassword} onChange={handleChange} />
+          </div>
+
+          <button type="submit" disabled={loading} className="btn-primary w-full text-lg py-3.5 mt-4">
             {loading ? (
               <span className="flex items-center justify-center gap-2">
                 <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
@@ -171,7 +138,6 @@ export default function Signup() {
           </button>
         </form>
 
-        {/* Login Link */}
         <p className="text-center mt-6 text-gray-600">
           Already have an account?{' '}
           <Link to="/login" className="text-rental-dark font-semibold hover:underline">
