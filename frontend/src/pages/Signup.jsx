@@ -106,7 +106,7 @@ export default function Signup() {
               <input type="text" name="aadhaar_number" placeholder="1234 5678 9012" className="input-field" value={formData.aadhaar_number} onChange={handleChange} />
             </div>
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1.5">DL Number</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1.5">Driving License Number</label>
               <input type="text" name="dl_number" placeholder="MH01 20240001234" className="input-field" value={formData.dl_number} onChange={handleChange} />
             </div>
           </div>
