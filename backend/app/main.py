@@ -11,8 +11,7 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
-        "https://car-a-rent.vercel.app",
-        "https://rentacar-mv94407nu-kvishal.vercel.app"   
+        "https://rentacar-rosy-nine.vercel.app/"
     ],
     allow_credentials=True,
     allow_methods=["*"],
